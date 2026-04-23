@@ -1,0 +1,53 @@
+# -----------------------------
+# Root / OS / Editor
+# -----------------------------
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# -----------------------------
+# Logs
+# -----------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# -----------------------------
+# Environment variables
+# -----------------------------
+.env
+.env.*
+!.env.example
+
+# -----------------------------
+# Node / package manager
+# -----------------------------
+node_modules/
+.pnpm-store/
+.npm/
+
+# -----------------------------
+# Build / coverage / cache
+# -----------------------------
+build/
+dist-ssr/
+coverage/
+.cache/
+.eslintcache
+
+# -----------------------------
+# Local-only files
+# -----------------------------
+*.local
+
+# -----------------------------
+# Runtime temp
+# -----------------------------
+tmp/
+temp/
