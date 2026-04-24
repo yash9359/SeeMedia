@@ -50,6 +50,66 @@ SeeMedia is a full-stack social media app with posts, reels, stories, profile ma
 
 ---
 
+## Flow Chart (Mermaid)
+
+```mermaid
+flowchart TD
+    A[User Opens App] --> B{Authenticated?}
+    B -- No --> C[Login / Register]
+    C --> D[JWT + Cookie Issued]
+    D --> E[Load Home Feed]
+    B -- Yes --> E[Load Home Feed]
+
+    E --> F[Create / View Posts, Reels, Stories]
+    F --> G[Upload Media to Cloudinary]
+    G --> H[Save Metadata in MongoDB]
+    H --> I[Serve Updated Feed]
+
+    E --> J[Open Chat]
+    J --> K[Socket.IO Connection]
+    K --> L[Send / Receive Real-Time Messages]
+
+    E --> M[Follow / Like / Comment]
+    M --> N[Create Notification]
+    N --> O[Real-Time Notification Event]
+```
+
+---
+
+## Sequence Diagram (Auth + Chat)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as User
+    participant FE as Frontend (React)
+    participant BE as Backend (Express API)
+    participant DB as MongoDB
+    participant CL as Cloudinary
+    participant SO as Socket.IO Server
+
+    U->>FE: Login (email/password)
+    FE->>BE: POST /api/users/login
+    BE->>DB: Validate user + password hash
+    DB-->>BE: User found
+    BE-->>FE: JWT cookie + user payload
+    FE-->>U: Redirect to Home Feed
+
+    U->>FE: Send chat message (+optional media)
+    alt Media attached
+        FE->>CL: Upload media file
+        CL-->>FE: mediaUrl
+    end
+    FE->>BE: POST /api/messages/send/:receiverId
+    BE->>DB: Save message document
+    DB-->>BE: Message saved
+    BE->>SO: Emit newMessage to receiver socket
+    SO-->>FE: newMessage event (real-time)
+    FE-->>U: Message shown instantly
+```
+
+---
+
 ## Tech Stack
 
 ### Frontend
