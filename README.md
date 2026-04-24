@@ -3,6 +3,15 @@
 SeeMedia is a full-stack social media app with posts, reels, stories, profile management, follow system, notifications, and real-time chat.
 
 ---
+## Screenshots
+
+<img width="1919" height="904" alt="image" src="https://github.com/user-attachments/assets/9240e8e3-e2c2-46f7-9657-00eb571a8310" />
+
+<img width="1919" height="904" alt="image" src="https://github.com/user-attachments/assets/142f0505-656a-4160-ae6f-1ddab16b7cd2" />
+
+
+
+---
 
 ## Links
 
