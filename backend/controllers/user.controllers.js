@@ -46,6 +46,7 @@ export const registerUser = async (req, res) => {
         res.status(201).cookie("token", token, options).json({
             success: true,
             message: "User registered successfully",
+            token,
 
             // rest of the user data without password
             user: rest,
@@ -90,6 +91,7 @@ export const loginUser = async (req, res) => {
         res.status(201).cookie("token", token, options).json({
             success: true,
             message: "User logged in successfully",
+            token,
             // rest of the user data without password
             user: rest,
         });

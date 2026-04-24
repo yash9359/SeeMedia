@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axios";
+import { axiosInstance, clearAuthToken, setAuthToken } from "@/lib/axios";
 import { connectSocket, disconnectSocket, getSocket } from "@/lib/socket";
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
@@ -216,6 +216,9 @@ export const registerUser = (userData) => async (dispatch) => {
     try {
         const { data } = await axiosInstance.post("/users/register", userData);
         if (data?.success) {
+            if (data?.token) {
+                setAuthToken(data.token);
+            }
             dispatch(setUser(data?.user));
             dispatch(setAuthChecked(true));
             await dispatch(fetchSuggestedUsers());
@@ -239,6 +242,9 @@ export const loginUser = (userData) => async (dispatch) => {
     try {
         const { data } = await axiosInstance.post("/users/login", userData);
         if (data?.success) {
+            if (data?.token) {
+                setAuthToken(data.token);
+            }
             dispatch(setUser(data?.user));
             dispatch(setAuthChecked(true));
             await dispatch(fetchSuggestedUsers());
@@ -289,6 +295,7 @@ export const logoutUser = (navigate) => async (dispatch) => {
         if (data?.success) {
 
             cleanupSocketConnection(socket);
+            clearAuthToken();
             dispatch(setUser(null));
             toast.success(data.message || "Logged Out Successfully");
             if (typeof navigate === "function") {
@@ -296,6 +303,7 @@ export const logoutUser = (navigate) => async (dispatch) => {
             }
         }
     } catch (error) {
+        clearAuthToken();
         dispatch(setError(error?.response?.data?.message || "Failed to Logout"));
         toast.error(error?.response?.data?.message || "Failed to Logout");
     } finally {
