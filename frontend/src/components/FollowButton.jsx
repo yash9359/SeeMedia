@@ -3,7 +3,7 @@ import {toast} from 'react-hot-toast'
 import { followUserAction, unfollowUserAction } from '@/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
 
-function FollowButton({targetUserId, currentUser}) {
+function FollowButton({ targetUserId, currentUser, className = "" }) {
 
   const [isFollowing,setIsFollowing] = useState(false);
   const [loading,setLoading] =useState(false);
@@ -55,9 +55,15 @@ function FollowButton({targetUserId, currentUser}) {
     <button 
       onClick={handleFollowToggle}
       disabled={loading}
-      className='py-2 px-4 rounded-md transition-all duration-200 active:scale-95 text-blue-500  hover:text-blue-700'
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+      className={`py-2 px-4 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 disabled:opacity-70 ${
+        isFollowing
+          ? "border-white/20 bg-white/5 text-gray-200 hover:border-red-400/50 hover:text-red-300"
+          : "border-indigo-500/40 bg-linear-to-r from-indigo-500 to-violet-500 text-white hover:from-indigo-400 hover:to-violet-400"
+      } ${className}`}
     >
-      {loading ? "..." : isFollowing ? "UnFollow" : "Follow"}
+      {loading ? "..." : isFollowing ? (hovering ? "Unfollow" : "Following") : "Follow"}
     </button>
     
   

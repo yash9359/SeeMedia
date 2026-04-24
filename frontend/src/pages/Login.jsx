@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AuthForm from "../components/AuthForm";
 import logo from "../assets/finalPNGSeemedia.png";
-import { motion,  AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerUser, loginUser, getCurrentUser, logoutUser } from "../redux/slices/userSlice";
@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const shouldReduceMotion = useReducedMotion();
 
   const {user} = useSelector((state) => state.user);
 
@@ -171,6 +172,18 @@ function Login() {
     });
   };
 
+  const sidePanelTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { type: "spring", stiffness: 110, damping: 20, mass: 0.85 };
+
+  const formTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { type: "spring", stiffness: 260, damping: 26, mass: 0.9 };
+
+  const logoIntroTransition = shouldReduceMotion
+    ? { duration: 0 }
+    : { type: "spring", stiffness: 140, damping: 16, mass: 0.8, delay: 0.08 };
+
   return (
    <div className="bg-black/95 text-white min-h-screen flex items-center justify-center p-4 sm:p-6 font-sans">
 
@@ -181,9 +194,9 @@ function Login() {
 
     {/* left side */}
     <motion.div
-      initial={{ x: -100, opacity: 0 }}
+      initial={shouldReduceMotion ? false : { x: -40, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={sidePanelTransition}
       className="hidden md:flex md:w-1/2 p-8 h-full items-center justify-center relative"
     >
 
@@ -195,32 +208,58 @@ function Login() {
 
         {/* logo reveal */}
         <motion.div
-          initial={{ scale: 0.5, opacity: 0, y: 50 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.4, ease: "easeOut" }}
-          className="w-52 md:w-64 lg:w-72 mb-5 drop-shadow-xl"
+          initial={shouldReduceMotion ? false : { scale: 0.86, opacity: 0, y: 26, rotate: -6 }}
+          animate={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
+          transition={logoIntroTransition}
+          className="relative w-52 md:w-64 lg:w-72 mb-5"
         >
-          <img
+          <motion.div
+            aria-hidden="true"
+            className="absolute -inset-4 rounded-full bg-white/20 blur-2xl"
+            initial={shouldReduceMotion ? false : { opacity: 0 }}
+            animate={shouldReduceMotion ? { opacity: 0.35 } : { opacity: [0.2, 0.45, 0.2] }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          <motion.div
+            aria-hidden="true"
+            className="absolute inset-0 rounded-full border border-white/30"
+            initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0 }}
+            animate={shouldReduceMotion ? { scale: 1, opacity: 0.25 } : { scale: [0.94, 1.06, 0.94], opacity: [0.2, 0.45, 0.2] }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          />
+
+          <motion.img
             src={logo}
-            alt="logo"
-            className="w-full h-auto object-contain"
+            alt="SeeMedia logo"
+            className="relative z-10 w-full h-auto object-contain drop-shadow-[0_14px_40px_rgba(0,0,0,0.45)]"
+            animate={
+              shouldReduceMotion
+                ? { y: 0, rotate: 0 }
+                : { y: [0, -8, 0], rotate: [0, -1.2, 0, 1.2, 0] }
+            }
+            transition={
+              shouldReduceMotion
+                ? { duration: 0 }
+                : { duration: 4.6, repeat: Infinity, ease: "easeInOut" }
+            }
           />
         </motion.div>
 
         {/* text */}
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.34, delay: 0.18, ease: "easeOut" }}
           className="text-3xl font-extrabold text-white mb-3 tracking-wide"
         >
           Connect with Friends
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.36, delay: 0.24, ease: "easeOut" }}
           className="text-gray-200 text-base md:text-lg font-light leading-relaxed"
         >
           Discover, share and connect with people all over the world.
@@ -232,26 +271,29 @@ function Login() {
     {/* right side */}
     <div className="w-full md:w-1/2 p-4 md:p-8 flex items-center justify-center">
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={view}
-          initial={{ opacity: 0, x: 60, scale: 0.95 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          exit={{ opacity: 0, x: -40, scale: 0.95 }}
-          transition={{ duration: 0.4 }}
-          className="w-full"
-        >
-          <AuthForm
-            view={view}
-            formData={formData}
-            errors={errors}
-            handlerChange={handlerChange}
-            handleSubmit={handleSubmit}
-            switchView={switchView}
-            token={token}
-          />
-        </motion.div>
-      </AnimatePresence>
+      <motion.div layout className="w-full relative overflow-hidden transform-gpu">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={view}
+            layout
+            initial={shouldReduceMotion ? false : { opacity: 0, x: 22 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={shouldReduceMotion ? {} : { opacity: 0, x: -14 }}
+            transition={formTransition}
+            className="w-full will-change-transform"
+          >
+            <AuthForm
+              view={view}
+              formData={formData}
+              errors={errors}
+              handlerChange={handlerChange}
+              handleSubmit={handleSubmit}
+              switchView={switchView}
+              token={token}
+            />
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
 
     </div>
 

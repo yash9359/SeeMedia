@@ -1,5 +1,6 @@
 import React from "react";
 import { Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 function AuthForm({
     view,
@@ -10,6 +11,15 @@ function AuthForm({
     switchView,
     token,
 }) {
+    const shouldReduceMotion = useReducedMotion();
+
+    const primaryButtonMotion = shouldReduceMotion
+        ? {}
+        : {
+            whileHover: { scale: 1.02, y: -1 },
+            whileTap: { scale: 0.98, y: 0 },
+            transition: { type: "spring", stiffness: 380, damping: 22, mass: 0.8 },
+        };
 
 
     const renderLoginForm = () => (
@@ -69,12 +79,13 @@ function AuthForm({
                 </button>
             </div>
 
-            <button
+            <motion.button
                 type="submit"
-                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:scale-105 transition"
+                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white transform-gpu"
+                {...primaryButtonMotion}
             >
                 Login
-            </button>
+            </motion.button>
 
             <div className="text-gray-400 text-sm">
                 Don't have an account?{" "}
@@ -161,12 +172,13 @@ function AuthForm({
                 </div>
             </div>
 
-            <button
+            <motion.button
                 type="submit"
-                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:scale-105 transition"
+                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white transform-gpu"
+                {...primaryButtonMotion}
             >
                 Register
-            </button>
+            </motion.button>
 
             <div className="text-gray-400 text-sm">
                 Already have an account?{" "}
@@ -215,12 +227,13 @@ function AuthForm({
                 />
             </div>
 
-            <button
+            <motion.button
                 type="submit"
-                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:scale-105 transition"
+                className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white transform-gpu"
+                {...primaryButtonMotion}
             >
                 Send Reset Link
-            </button>
+            </motion.button>
         </div>
     );
 
@@ -286,12 +299,13 @@ function AuthForm({
                     </button>
                 </div>
 
-                <button
+                <motion.button
                     type="submit"
-                    className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white hover:scale-105 transition"
+                    className="w-full bg-linear-to-r from-indigo-500 to-pink-500 py-3 rounded-xl font-semibold text-white transform-gpu"
+                    {...primaryButtonMotion}
                 >
                     Change Password
-                </button>
+                </motion.button>
 
                 <div className="text-gray-400 text-sm">
                     Don't have an account?{" "}

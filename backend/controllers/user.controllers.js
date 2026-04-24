@@ -505,9 +505,19 @@ export const getfollowing = async (req, res) => {
 export const getSuggestedUsers = async (req, res) => {
     try {
         const currentUserId = req.user?._id;
-        const suggestedUsers = await User.find({
+        const showAll = req.query?.all === "true";
+        const parsedLimit = Number(req.query?.limit);
+        const safeLimit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? parsedLimit : 10;
+
+        let query = User.find({
             _id: { $ne: currentUserId, $nin: req.user.following || [] },
-        }).select("username profileImage").limit(10);
+        }).select("username profileImage");
+
+        if (!showAll) {
+            query = query.limit(safeLimit);
+        }
+
+        const suggestedUsers = await query;
 
         res.status(200).json({
             success: true,

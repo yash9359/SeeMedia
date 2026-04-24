@@ -213,6 +213,7 @@ const cleanupSocketConnection = (socket) => {
 // register user
 export const registerUser = (userData) => async (dispatch) => {
     dispatch(setLoading(true));
+    const registerToastId = toast.loading("Creating account...");
     try {
         const { data } = await axiosInstance.post("/users/register", userData);
         if (data?.success) {
@@ -223,14 +224,16 @@ export const registerUser = (userData) => async (dispatch) => {
             dispatch(setAuthChecked(true));
             await dispatch(fetchSuggestedUsers());
             setupSocketConnection(data?.user?._id, dispatch)
-            toast.success(data.message || "Registered Successfully");
+            toast.success(data.message || "Registered Successfully", { id: registerToastId });
 
 
             // if (navigate) navigate("/");
+        } else {
+            toast.dismiss(registerToastId);
         }
     } catch (error) {
         dispatch(setError(error?.response?.data?.message || "Registration Failed"));
-        toast.error(error?.response?.data?.message || "Registration Failed");
+        toast.error(error?.response?.data?.message || "Registration Failed", { id: registerToastId });
     } finally {
         dispatch(setLoading(false));
     }
@@ -239,6 +242,7 @@ export const registerUser = (userData) => async (dispatch) => {
 // login user
 export const loginUser = (userData) => async (dispatch) => {
     dispatch(setLoading(true));
+    const loginToastId = toast.loading("Logging in...");
     try {
         const { data } = await axiosInstance.post("/users/login", userData);
         if (data?.success) {
@@ -251,13 +255,15 @@ export const loginUser = (userData) => async (dispatch) => {
 
             setupSocketConnection(data?.user?._id, dispatch)
 
-            toast.success(data.message || "Logged In Successfully");
+            toast.success(data.message || "Logged In Successfully", { id: loginToastId });
 
             // if (navigate) navigate("/");
+        } else {
+            toast.dismiss(loginToastId);
         }
     } catch (error) {
         dispatch(setError(error?.response?.data?.message || "Login Failed"));
-        toast.error(error?.response?.data?.message || "Login Failed");
+        toast.error(error?.response?.data?.message || "Login Failed", { id: loginToastId });
     } finally {
         dispatch(setLoading(false));
     }
@@ -374,10 +380,21 @@ export const getUserById = (id) => async (dispatch) => {
     }
 };
 // suggestedUsers
-export const fetchSuggestedUsers = () => async (dispatch) => {
+export const fetchSuggestedUsers = (options = {}) => async (dispatch) => {
     dispatch(setSuggestedUsersLoading(true));
     try {
-        const { data } = await axiosInstance.get(`/users/suggested/users`);
+        const params = new URLSearchParams();
+
+        if (options?.all) {
+            params.set("all", "true");
+        } else if (options?.limit) {
+            params.set("limit", String(options.limit));
+        }
+
+        const query = params.toString();
+        const { data } = await axiosInstance.get(
+            `/users/suggested/users${query ? `?${query}` : ""}`,
+        );
         if (data?.success) {
             dispatch(setSuggestedUsers(data?.users));
         }
