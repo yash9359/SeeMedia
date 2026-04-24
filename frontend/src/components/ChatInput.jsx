@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { Check, CloudUploadIcon } from "lucide-react";
 
-function ChatInput({ handleSend }) {
+function ChatInput({ handleSend, onTypingChange }) {
     const [message, setMessage] = useState("");
     const [file, setFile] = useState(null);
     const [showEmoji, setShowEmoji] = useState(false);
@@ -21,6 +21,7 @@ function ChatInput({ handleSend }) {
         if (!message.trim() && !file) return;
 
         handleSend(message, file);
+        onTypingChange?.(false);
         setMessage("");
         setFile(null);
     };
@@ -109,7 +110,11 @@ function ChatInput({ handleSend }) {
                 <input
                     type="text"
                     value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => {
+                        const nextValue = e.target.value;
+                        setMessage(nextValue);
+                        onTypingChange?.(Boolean(nextValue.trim()));
+                    }}
                     placeholder="Type a message..."
                     onKeyDown={(e)=>{
                         if(e.key === "Enter"){
