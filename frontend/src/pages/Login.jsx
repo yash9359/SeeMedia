@@ -120,9 +120,6 @@ function Login() {
 
     if (!validateForm()) return
 
-
-    console.log(" Form Submitted:", formData);
-
     if (view == "signup") {
       dispatch(registerUser({
         username: formData.username,
@@ -138,14 +135,11 @@ function Login() {
       }));
     }
     else if (view == "forgotPassword") {
-
-      console.log("forgot password");
       //   dispatch(loginUser({
       //     email: formData.email,
       //   }));
     }
     else if (view == "passwordChange") {
-      console.log("passwordChange ");
     }
 
     // Clear Form after submit

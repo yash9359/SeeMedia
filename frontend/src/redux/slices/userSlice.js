@@ -428,12 +428,17 @@ export const followUserAction = (targetUserId) => async (dispatch, getState) => 
                 };
                 dispatch(setProfileUser(updatedProfileUser));
             }
+
+            return true;
         }
+
+        return false;
     } catch (error) {
         dispatch(
             setError(error?.response?.data?.message || "Failed to follow User")
         );
         toast.error(error?.response?.data?.message || "Failed to follow User");
+        return false;
     } finally {
         dispatch(setLoading(false));
     }
@@ -480,12 +485,17 @@ export const unfollowUserAction = (targetUserId) => async (dispatch, getState) =
                 };
                 dispatch(setProfileUser(updatedProfileUser));
             }
+
+            return true;
         }
+
+        return false;
     } catch (error) {
         dispatch(
             setError(error?.response?.data?.message || "Failed to unfollow User"),
         );
         toast.error(error?.response?.data?.message || "Failed to unfollow User");
+        return false;
     } finally {
         dispatch(setLoading(false));
     }

@@ -1,7 +1,12 @@
 export const timeAgo = (date) => {
+    if (!date) return "just now";
+
     const now = new Date();
     const commentDate = new Date(date);
+    if (Number.isNaN(commentDate.getTime())) return "just now";
+
     const diffInSeconds = Math.floor((now - commentDate) / 1000);
+    if (!Number.isFinite(diffInSeconds) || diffInSeconds < 0) return "just now";
 
     if (diffInSeconds < 60) {
         return `${diffInSeconds} ${diffInSeconds === 1 ? "second" : "seconds"} ago`;

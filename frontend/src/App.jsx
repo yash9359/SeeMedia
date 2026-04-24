@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import { RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./redux/slices/userSlice";
 import { warmupBackend } from "./lib/axios";
@@ -19,9 +19,6 @@ import PublicRoute from "./PublicRoute/PublicRoute";
 
 function App() {
   const dispatch = useDispatch();
-  const { onlineUsers } = useSelector((state) => state.user);
-
-  console.log("onlineUsers : ", onlineUsers);
 
   useEffect(() => {
     const initializeApp = async () => {

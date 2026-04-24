@@ -6,11 +6,6 @@ import { timeAgo } from '@/lib/timeAgo';
 
 function CommentSection({ comments }) {
 
-    console.log("comments",comments);
-    comments?.map((c, i) => {
-  console.log(`Comment ${i}:`, timeAgo(c?.createdAt));
-});
-
     return (
         <div className='flex-1 flex flex-col'>
             

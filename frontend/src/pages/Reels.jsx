@@ -20,7 +20,6 @@ import CommentForm from "@/components/CommentForm";
 function Reels() {
   const { reels } = useSelector((state) => state.reels);
   const { user: currentUser } = useSelector((state) => state.user);
-  console.log("reels", reels);
 
   const dispatch = useDispatch();
 

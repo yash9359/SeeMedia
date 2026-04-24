@@ -27,10 +27,6 @@ function Explore() {
   const startX = useRef(0);
   const scrollLeftStart = useRef(0);
 
-
-
-  console.log("posts", posts)
-
   const scroll = (direction) => {
 
     if (!scrollRef.current) return;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { axiosInstance } from '@/lib/axios'
 import {toast} from 'react-hot-toast'
 import { followUserAction, unfollowUserAction } from '@/redux/slices/userSlice';
 import { useDispatch } from 'react-redux';
@@ -27,12 +26,17 @@ function FollowButton({targetUserId, currentUser}) {
         setIsFollowing(!isFollowing)
         setLoading(true);
         try {
+          let success = false;
           if(prevState){
-          await dispatch(unfollowUserAction(targetUserId)).unwrap();
+            success = await dispatch(unfollowUserAction(targetUserId));
           }
           else{
-            await dispatch(followUserAction(targetUserId)).unwrap();
+            success = await dispatch(followUserAction(targetUserId));
             
+          }
+
+          if(!success){
+            setIsFollowing(prevState);
           }
         } catch (error) {
           //  RollBack
