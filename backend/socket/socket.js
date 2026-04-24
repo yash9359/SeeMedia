@@ -37,29 +37,8 @@ io.on("connection",(socket)=>{
     const userId = socket.handshake.query.userId
     if(userId){
       onlineUsersMap[userId] =socket.id;
-      socket.data.userId = userId;
       console.log(`User connected UserId : ${userId} SocketId : ${socket.id}`);
     }
-
-    socket.on("typing", ({ receiverId } = {}) => {
-      const senderId = socket.data?.userId;
-      if (!senderId || !receiverId) return;
-
-      const receiverSocketId = getReceiverSocketID(receiverId);
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("typing", { senderId });
-      }
-    });
-
-    socket.on("stopTyping", ({ receiverId } = {}) => {
-      const senderId = socket.data?.userId;
-      if (!senderId || !receiverId) return;
-
-      const receiverSocketId = getReceiverSocketID(receiverId);
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit("stopTyping", { senderId });
-      }
-    });
 
     // Send updated online Users list to everyone
     io.emit("getOnlineUsers",Object.keys(onlineUsersMap));

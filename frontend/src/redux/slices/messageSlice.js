@@ -8,7 +8,6 @@ const initialState = {
     messages: [],
     users: [],
     selectedUser: null,
-    typingUsers: {},
     loading: false,
     error: null,
 };
@@ -34,16 +33,6 @@ export const messageSlice = createSlice({
         setAllUsersForMessage: (state, action) => {
             state.users = action.payload
         },
-        setTypingStatus: (state, action) => {
-            const { userId, isTyping } = action.payload || {};
-            if (!userId) return;
-
-            if (isTyping) {
-                state.typingUsers[userId] = true;
-            } else {
-                delete state.typingUsers[userId];
-            }
-        },
         setError: (state, action) => {
             state.error = action.payload;
         },
@@ -55,7 +44,6 @@ export const {
     setAllUsersForMessage,
     setMessages,
     setSelectedUser,
-    setTypingStatus,
     setError,
     setLoading,
 } = messageSlice.actions;
@@ -140,10 +128,7 @@ export const subscribeMessages = () => async (dispatch, getState) => {
     const socket = getSocket();
 
     if (!socket) return;
-
     socket.off("newMessage");
-    socket.off("typing");
-    socket.off("stopTyping");
 
     socket.on("newMessage", (newMessage) => {
         if (newMessage.senderId !== selectedUser?._id) {
@@ -152,21 +137,11 @@ export const subscribeMessages = () => async (dispatch, getState) => {
         dispatch(addMessage(newMessage))
     })
 
-    socket.on("typing", ({ senderId } = {}) => {
-        if (senderId !== selectedUser?._id) return;
-        dispatch(setTypingStatus({ userId: senderId, isTyping: true }));
-    });
-
-    socket.on("stopTyping", ({ senderId } = {}) => {
-        if (senderId !== selectedUser?._id) return;
-        dispatch(setTypingStatus({ userId: senderId, isTyping: false }));
-    });
-
 
 }
 
 // UnSubscribe from new message 
-export const unSubscribeMessages = () => async (dispatch, getState) => {
+export const unSubscribeMessages = () => async () => {
 
    
 
@@ -174,8 +149,6 @@ export const unSubscribeMessages = () => async (dispatch, getState) => {
 
     if (!socket) return;
     socket.off("newMessage");
-    socket.off("typing");
-    socket.off("stopTyping");
 
 
 }

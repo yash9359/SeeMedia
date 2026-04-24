@@ -3,7 +3,6 @@ import EmptyMessage from '@/components/EmptyMessage';
 import MessageSideBar from '@/components/MessageSideBar'
 import Modal from '@/components/Modal';
 import ProfileImage from '@/components/ProfileImage';
-import { getSocket } from '@/lib/socket';
 import { getAllMessages, sendMessage, subscribeMessages, unSubscribeMessages } from '@/redux/slices/messageSlice';
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,9 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Message() {
   const dispatch = useDispatch()
-  const { selectedUser, messages, typingUsers } = useSelector((state) => state.messages);
+  const { selectedUser, messages } = useSelector((state) => state.messages);
   const { user: currentUser } = useSelector(state => state.user);
-  const isSelectedUserTyping = selectedUser?._id ? Boolean(typingUsers[selectedUser._id]) : false;
 
   const chatMedia = useMemo(() => {
     return messages
@@ -38,16 +36,6 @@ function Message() {
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
-  const typingTimeoutRef = useRef(null);
-
-  const emitTypingEvent = useCallback((isTyping) => {
-    const socket = getSocket();
-    if (!socket || !selectedUser?._id) return;
-
-    socket.emit(isTyping ? "typing" : "stopTyping", {
-      receiverId: selectedUser._id,
-    });
-  }, [selectedUser?._id]);
 
   const scrollToBottom = useCallback((behavior = "auto") => {
     const container = messagesContainerRef.current;
@@ -98,12 +86,6 @@ function Message() {
 
     // sender ke message pe hamesha latest pe le jao
     shouldAutoScrollRef.current = true;
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
-    emitTypingEvent(false);
     
     console.log("text", text);
     console.log("file", file);
@@ -117,31 +99,6 @@ function Message() {
     
     
   }
-
-  const handleTypingChange = useCallback((isTyping) => {
-    if (!selectedUser?._id) return;
-
-    if (isTyping) {
-      emitTypingEvent(true);
-
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-
-      typingTimeoutRef.current = setTimeout(() => {
-        emitTypingEvent(false);
-        typingTimeoutRef.current = null;
-      }, 1200);
-      return;
-    }
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = null;
-    }
-
-    emitTypingEvent(false);
-  }, [emitTypingEvent, selectedUser?._id]);
   
   const openMediaModal = (msg) => {
      if (msg?.mediaType !== "image") return;
@@ -172,15 +129,6 @@ function Message() {
     return () =>dispatch(unSubscribeMessages())
 
   }, [dispatch, selectedUser?._id]);
-
-  useEffect(() => {
-    return () => {
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-      emitTypingEvent(false);
-    };
-  }, [emitTypingEvent]);
 
 
 
@@ -269,25 +217,13 @@ function Message() {
                 })
               )}
 
-              {isSelectedUserTyping && (
-                <div className='flex justify-start'>
-                  <div className='bg-zinc-200 text-black rounded-2xl rounded-bl-md px-3 py-2 sm:px-4 sm:py-2.5 shadow-md'>
-                    <div className='flex items-center gap-1'>
-                      <span className='w-2 h-2 rounded-full bg-zinc-600 animate-bounce [animation-delay:-0.2s]'></span>
-                      <span className='w-2 h-2 rounded-full bg-zinc-600 animate-bounce [animation-delay:-0.1s]'></span>
-                      <span className='w-2 h-2 rounded-full bg-zinc-600 animate-bounce'></span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               <div ref={messageEndRef} />
             </div>
           </>
         )}
 
         {selectedUser && (
-          <ChatInput handleSend={handleSend} onTypingChange={handleTypingChange} />
+          <ChatInput handleSend={handleSend} />
         )}
 
       </div>
