@@ -55,13 +55,13 @@ Frontend (React + Vite)          Backend (Express + Node.js)
 │  Socket.IO Client   │◄────────►│  Socket.IO Server        │
 │  Framer Motion      │ WS conn  │  Cloudinary Uploads      │
 └─────────────────────┘          └──────────┬───────────────┘
-                                             │
-                                   ┌─────────▼──────────┐
-                                   │     MongoDB        │
-                                   │  Users, Posts,     │
-                                   │  Reels, Stories,   │
-                                   │  Messages          │
-                                   └────────────────────┘
+                       │
+                   ┌─────────▼──────────┐
+                   │     MongoDB        │
+                   │  Users, Posts,     │
+                   │  Reels, Stories,   │
+                   │  Messages          │
+                   └────────────────────┘
 ```
 
 ---
@@ -72,38 +72,38 @@ Every incoming HTTP request goes through these layers in order:
 
 ```mermaid
 flowchart TD
-    A[Incoming HTTP Request] --> B[index.js Entry Point]
-    B --> C[Express Middleware Layer]
-    C --> C1[cors — allow frontend origin]
-    C --> C2[cookie-parser — parse JWT cookie]
-    C --> C3[express.json — parse request body]
-    C1 --> D[Router — match URL to route file]
-    C2 --> D[Router — match URL to route file]
-    C3 --> D[Router — match URL to route file]
+  A[Incoming HTTP Request] --> B[index.js Entry Point]
+  B --> C[Express Middleware Layer]
+  C --> C1[cors — allow frontend origin]
+  C --> C2[cookie-parser — parse JWT cookie]
+  C --> C3[express.json — parse request body]
+  C1 --> D[Router — match URL to route file]
+  C2 --> D[Router — match URL to route file]
+  C3 --> D[Router — match URL to route file]
 
-    D --> E{Protected Route?}
-    E -- Yes --> F[isAuthenticated Middleware]
-    F --> F1{JWT valid?}
-    F1 -- No --> F2[Return 401 Unauthorized]
-    F1 -- Yes --> G[Controller Function]
-    E -- No --> G
+  D --> E{Protected Route?}
+  E -- Yes --> F[isAuthenticated Middleware]
+  F --> F1{JWT valid?}
+  F1 -- No --> F2[Return 401 Unauthorized]
+  F1 -- Yes --> G[Controller Function]
+  E -- No --> G
 
-    G --> H{Media Upload?}
-    H -- Yes --> I[Multer Middleware]
-    I --> J[multer-storage-cloudinary]
-    J --> K[Cloudinary CDN]
-    K --> L[Returns mediaUrl]
-    L --> G
-    H -- No --> M[Mongoose Model]
-    G --> M
+  G --> H{Media Upload?}
+  H -- Yes --> I[Multer Middleware]
+  I --> J[multer-storage-cloudinary]
+  J --> K[Cloudinary CDN]
+  K --> L[Returns mediaUrl]
+  L --> G
+  H -- No --> M[Mongoose Model]
+  G --> M
 
-    M --> N[MongoDB Atlas]
-    N --> O[Document saved / fetched]
-    O --> P{Socket event needed?}
-    P -- Yes --> Q[socket.io emit to target userId]
-    Q --> R[Real-time event on client]
-    P -- No --> S[JSON Response to Frontend]
-    R --> S
+  M --> N[MongoDB Atlas]
+  N --> O[Document saved / fetched]
+  O --> P{Socket event needed?}
+  P -- Yes --> Q[socket.io emit to target userId]
+  Q --> R[Real-time event on client]
+  P -- No --> S[JSON Response to Frontend]
+  R --> S
 ```
 
 ---
@@ -112,15 +112,15 @@ flowchart TD
 
 ```mermaid
 flowchart LR
-    A[Request hits protected route] --> B[isAuthenticated middleware]
-    B --> C[Read token from cookie OR Authorization header]
-    C --> D{Token found?}
-    D -- No --> E[401 — No token provided]
-    D -- Yes --> F[jwt.verify with JWT_SECRET]
-    F --> G{Valid?}
-    G -- No --> H[401 — Invalid token]
-    G -- Yes --> I[Attach userId to req.user]
-    I --> J[next — pass to controller]
+  A[Request hits protected route] --> B[isAuthenticated middleware]
+  B --> C[Read token from cookie OR Authorization header]
+  C --> D{Token found?}
+  D -- No --> E[401 — No token provided]
+  D -- Yes --> F[jwt.verify with JWT_SECRET]
+  F --> G{Valid?}
+  G -- No --> H[401 — Invalid token]
+  G -- Yes --> I[Attach userId to req.user]
+  I --> J[next — pass to controller]
 ```
 
 > Cookie token takes priority. If not found, falls back to `Bearer` token in `Authorization` header.
@@ -131,28 +131,28 @@ flowchart LR
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor U as User
-    participant FE as Frontend
-    participant MW as Middleware
-    participant CT as PostController
-    participant CL as Cloudinary
-    participant DB as MongoDB
-    participant SO as Socket.IO
+  autonumber
+  actor U as User
+  participant FE as Frontend
+  participant MW as Middleware
+  participant CT as PostController
+  participant CL as Cloudinary
+  participant DB as MongoDB
+  participant SO as Socket.IO
 
-    U->>FE: Select image/video + write caption
-    FE->>MW: POST /api/posts/create (multipart form)
-    MW->>MW: isAuthenticated — verify JWT
-    MW->>MW: multer — parse file from request
-    MW->>CL: Upload file buffer to Cloudinary
-    CL-->>MW: Returns secure mediaUrl
-    MW->>CT: req.file.path = mediaUrl, req.user = userId
-    CT->>DB: Post.create — save post document
-    DB-->>CT: Saved post with _id
-    CT->>DB: User.findByIdAndUpdate — push post._id to user.posts
-    DB-->>CT: User updated
-    CT-->>FE: 201 — post object in JSON
-    FE-->>U: Post appears in feed instantly
+  U->>FE: Select image/video + write caption
+  FE->>MW: POST /api/posts/create (multipart form)
+  MW->>MW: isAuthenticated — verify JWT
+  MW->>MW: multer — parse file from request
+  MW->>CL: Upload file buffer to Cloudinary
+  CL-->>MW: Returns secure mediaUrl
+  MW->>CT: req.file.path = mediaUrl, req.user = userId
+  CT->>DB: Post.create — save post document
+  DB-->>CT: Saved post with _id
+  CT->>DB: User.findByIdAndUpdate — push post._id to user.posts
+  DB-->>CT: User updated
+  CT-->>FE: 201 — post object in JSON
+  FE-->>U: Post appears in feed instantly
 ```
 
 ---
@@ -161,23 +161,23 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A[Backend starts — index.js] --> B[HTTP server created]
-    B --> C[Socket.IO attaches to HTTP server]
-    C --> D[Client connects with userId in query]
-    D --> E[userSocketMap stores userId → socketId]
-    E --> F[Emit getOnlineUsers to all clients]
+  A[Backend starts — index.js] --> B[HTTP server created]
+  B --> C[Socket.IO attaches to HTTP server]
+  C --> D[Client connects with userId in query]
+  D --> E[userSocketMap stores userId → socketId]
+  E --> F[Emit getOnlineUsers to all clients]
 
-    G[User sends message] --> H[POST /api/messages/send]
-    H --> I[Message saved in DB]
-    I --> J[getReceiverSocketId — lookup socketId]
-    J --> K{Receiver online?}
-    K -- Yes --> L[io.to socketId .emit newMessage]
-    L --> M[Receiver gets message instantly]
-    K -- No --> N[Message saved, delivered on next login]
+  G[User sends message] --> H[POST /api/messages/send]
+  H --> I[Message saved in DB]
+  I --> J[getReceiverSocketId — lookup socketId]
+  J --> K{Receiver online?}
+  K -- Yes --> L[io.to socketId .emit newMessage]
+  L --> M[Receiver gets message instantly]
+  K -- No --> N[Message saved, delivered on next login]
 
-    O[User follows / likes] --> P[Controller creates notification]
-    P --> Q[Emit notification event to target socketId]
-    Q --> R[Target user sees live notification]
+  O[User follows / likes] --> P[Controller creates notification]
+  P --> Q[Emit notification event to target socketId]
+  Q --> R[Target user sees live notification]
 ```
 
 ---
@@ -186,24 +186,24 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[User Opens App] --> B{Authenticated?}
-    B -- No --> C[Login / Register]
-    C --> D[JWT + Cookie Issued]
-    D --> E[Load Home Feed]
-    B -- Yes --> E[Load Home Feed]
+  A[User Opens App] --> B{Authenticated?}
+  B -- No --> C[Login / Register]
+  C --> D[JWT + Cookie Issued]
+  D --> E[Load Home Feed]
+  B -- Yes --> E[Load Home Feed]
 
-    E --> F[Create / View Posts, Reels, Stories]
-    F --> G[Upload Media to Cloudinary]
-    G --> H[Save Metadata in MongoDB]
-    H --> I[Serve Updated Feed]
+  E --> F[Create / View Posts, Reels, Stories]
+  F --> G[Upload Media to Cloudinary]
+  G --> H[Save Metadata in MongoDB]
+  H --> I[Serve Updated Feed]
 
-    E --> J[Open Chat]
-    J --> K[Socket.IO Connection]
-    K --> L[Send / Receive Real-Time Messages]
+  E --> J[Open Chat]
+  J --> K[Socket.IO Connection]
+  K --> L[Send / Receive Real-Time Messages]
 
-    E --> M[Follow / Like / Comment]
-    M --> N[Create Notification]
-    N --> O[Real-Time Notification Event]
+  E --> M[Follow / Like / Comment]
+  M --> N[Create Notification]
+  N --> O[Real-Time Notification Event]
 ```
 
 ---
@@ -212,32 +212,32 @@ flowchart TD
 
 ```mermaid
 sequenceDiagram
-    autonumber
-    actor U as User
-    participant FE as Frontend (React)
-    participant BE as Backend (Express)
-    participant DB as MongoDB
-    participant CL as Cloudinary
-    participant SO as Socket.IO
+  autonumber
+  actor U as User
+  participant FE as Frontend (React)
+  participant BE as Backend (Express)
+  participant DB as MongoDB
+  participant CL as Cloudinary
+  participant SO as Socket.IO
 
-    U->>FE: Login (email/password)
-    FE->>BE: POST /api/users/login
-    BE->>DB: Validate user + password hash
-    DB-->>BE: User found
-    BE-->>FE: JWT cookie + user payload
-    FE-->>U: Redirect to Home Feed
+  U->>FE: Login (email/password)
+  FE->>BE: POST /api/users/login
+  BE->>DB: Validate user + password hash
+  DB-->>BE: User found
+  BE-->>FE: JWT cookie + user payload
+  FE-->>U: Redirect to Home Feed
 
-    U->>FE: Send chat message (+optional media)
-    alt Media attached
-        FE->>CL: Upload media file
-        CL-->>FE: mediaUrl
-    end
-    FE->>BE: POST /api/messages/send/:receiverId
-    BE->>DB: Save message document
-    DB-->>BE: Message saved
-    BE->>SO: Emit newMessage to receiver socket
-    SO-->>FE: newMessage event (real-time)
-    FE-->>U: Message shown instantly
+  U->>FE: Send chat message (+optional media)
+  alt Media attached
+    FE->>CL: Upload media file
+    CL-->>FE: mediaUrl
+  end
+  FE->>BE: POST /api/messages/send/:receiverId
+  BE->>DB: Save message document
+  DB-->>BE: Message saved
+  BE->>SO: Emit newMessage to receiver socket
+  SO-->>FE: newMessage event (real-time)
+  FE-->>U: Message shown instantly
 ```
 
 ---
@@ -411,7 +411,7 @@ npm run dev
 
 ## 📄 License
 
-Open source — free to use for learning and personal projects.
+Open source for learning and personal projects.
 
 ---
 
