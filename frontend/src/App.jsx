@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCurrentUser } from "./redux/slices/userSlice";
+import { warmupBackend } from "./lib/axios";
 import Explore from "./pages/Explore";
 import Reels from "./pages/Reels";
 import Message from "./pages/Message";
@@ -23,7 +24,14 @@ function App() {
   console.log("onlineUsers : ", onlineUsers);
 
   useEffect(() => {
-    dispatch(getCurrentUser());
+    const initializeApp = async () => {
+      if (import.meta.env.PROD) {
+        await warmupBackend();
+      }
+      dispatch(getCurrentUser());
+    };
+
+    initializeApp();
   }, [dispatch]);
 
   const router = createBrowserRouter([
