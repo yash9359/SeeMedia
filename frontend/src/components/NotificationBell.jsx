@@ -66,51 +66,61 @@ function NotificationBell() {
 
             {/* DropDown */}
             {isOpen && (
-                <div className="absolute left-full ml-3 top-0 w-80 z-50 max-h-96 overflow-y-auto rounded-2xl 
-                border border-white/10 bg-slate-900/95 backdrop-blur-xl shadow-2xl">
-                    <div className="p-3 border-b border-white/10 flex justify-between items-center">
-                        <h3 className="font-semibold text-gray-100">Notifications</h3>
-                        <span className="text-xs text-gray-400 flex items-center gap-1">
-                            <Check size={14} /> Latest
-                        </span>
-                    </div>
+                <>
+                    <button
+                        type="button"
+                        className="fixed inset-0 z-40 bg-black/40 md:hidden"
+                        onClick={() => setIsOpen(false)}
+                        aria-label="Close notifications"
+                    />
 
-                    {totalNotifications === 0 ? (
-                        <div className="p-6 text-center text-sm text-gray-400">
-                            No notifications yet
+                    <div className="fixed left-1/2 top-4 -translate-x-1/2 z-50 w-[calc(100vw-1.25rem)] max-w-sm max-h-[75vh] overflow-y-auto rounded-2xl 
+                    border border-white/10 bg-slate-900/95 backdrop-blur-xl shadow-2xl
+                    md:absolute md:left-full md:top-0 md:ml-3 md:w-80 md:max-h-96 md:translate-x-0">
+                        <div className="p-3 border-b border-white/10 flex justify-between items-center">
+                            <h3 className="font-semibold text-gray-100">Notifications</h3>
+                            <span className="text-xs text-gray-400 flex items-center gap-1">
+                                <Check size={14} /> Latest
+                            </span>
                         </div>
-                    ) : (
-                        notification.slice(0, 20).map((notify, idx) => (
-                            <div
-                                key={`${notify.type}-${notify.userId}-${notify.postId || notify.targetUserId || idx}-${notify.createdAt || idx}`}
-                                className="p-3 border-b last:border-b-0 border-white/5 hover:bg-white/5 transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <div className="flex items-start gap-3">
-                                    <div className="mt-0.5 w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-                                        {getNotification(notify)}
-                                    </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <Link
-                                            to={`/profile/${notify.userId}`}
-                                            className="text-sm text-gray-100 hover:text-indigo-300 line-clamp-2"
-                                        >
-                                            {notify?.message || "New activity"}
-                                        </Link>
-                                        <p className="text-xs text-gray-400 mt-1">
-                                            {timeAgo(notify.createdAt)}
-                                        </p>
-                                    </div>
-
-                                    {!notify?.read && (
-                                        <span className="w-2 h-2 rounded-full bg-indigo-400 mt-2" />
-                                    )}
-                                </div>
+                        {totalNotifications === 0 ? (
+                            <div className="p-6 text-center text-sm text-gray-400">
+                                No notifications yet
                             </div>
-                        ))
-                    )}
-                </div>
+                        ) : (
+                            notification.slice(0, 20).map((notify, idx) => (
+                                <div
+                                    key={`${notify.type}-${notify.userId}-${notify.postId || notify.targetUserId || idx}-${notify.createdAt || idx}`}
+                                    className="p-3 border-b last:border-b-0 border-white/5 hover:bg-white/5 transition-colors"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="mt-0.5 w-7 h-7 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+                                            {getNotification(notify)}
+                                        </div>
+
+                                        <div className="flex-1 min-w-0">
+                                            <Link
+                                                to={`/profile/${notify.userId}`}
+                                                className="text-sm text-gray-100 hover:text-indigo-300 line-clamp-2"
+                                            >
+                                                {notify?.message || "New activity"}
+                                            </Link>
+                                            <p className="text-xs text-gray-400 mt-1">
+                                                {timeAgo(notify.createdAt)}
+                                            </p>
+                                        </div>
+
+                                        {!notify?.read && (
+                                            <span className="w-2 h-2 rounded-full bg-indigo-400 mt-2" />
+                                        )}
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </>
             )}
         </div>
     );

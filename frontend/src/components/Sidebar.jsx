@@ -68,7 +68,7 @@ function Sidebar() {
     <>
       <aside
         className="sticky top-0 left-0 h-screen w-20 md:w-64 p-3 md:p-4 flex flex-col gap-4 md:gap-6 
-  border-r border-white/10 backdrop-blur-2xl bg-white/5 
+  border-r border-white/10 backdrop-blur-2xl bg-white/5
   shadow-[0_10px_40px_rgba(0,0,0,0.5)]"
       >
         {/* logo */}
@@ -112,7 +112,7 @@ function Sidebar() {
               <button
                 key={item.id}
                 onClick={() => dispatch(logoutUser(navigate))}
-                className="w-full flex items-center justify-start gap-3 p-2 px-3 rounded-xl 
+                className="w-full flex items-center justify-center md:justify-start gap-0 md:gap-3 p-2 px-2 md:px-3 rounded-xl 
             transition-all duration-300 
             hover:bg-linear-to-r hover:from-pink-500/20 hover:to-purple-500/20
             hover:scale-[1.02] active:scale-95"
@@ -127,7 +127,7 @@ function Sidebar() {
                 key={item.id}
                 to={item.link}
                 onClick={() => setActive(item.id)}
-                className={`w-full flex items-center justify-start gap-3 p-2 px-3 rounded-xl 
+                className={`w-full flex items-center justify-center md:justify-start gap-0 md:gap-3 p-2 px-2 md:px-3 rounded-xl 
             transition-all duration-300 
             hover:bg-linear-to-r hover:from-pink-500/20 hover:to-purple-500/20
             hover:scale-[1.02] active:scale-95
@@ -146,7 +146,7 @@ function Sidebar() {
 
           {/* notification */}
           <div
-            className="w-full flex items-center justify-start gap-3 p-2 px-3 rounded-xl 
+            className="w-full flex items-center justify-center md:justify-start gap-0 md:gap-3 p-2 px-2 md:px-3 rounded-xl 
       transition-all duration-300 
       hover:bg-linear-to-r hover:from-pink-500/20 hover:to-purple-500/20"
           >

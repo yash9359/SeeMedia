@@ -1,7 +1,11 @@
 import {io} from 'socket.io-client';
 
 
-const backendUrl = 'http://localhost:8000';
+const backendUrl =
+    import.meta.env.VITE_BACKEND_URL ||
+    (import.meta.env.PROD
+        ? 'https://seemedia.onrender.com'
+        : 'http://localhost:8000');
 
 let socket =null;
 

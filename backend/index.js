@@ -14,11 +14,16 @@ import { app, server } from "./socket/socket.js";
 // const app = express();
 const PORT = process.env.PORT || 3000;
 
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://see-media.vercel.app",
+    process.env.CLIENT_URL,
+].filter(Boolean);
+
 const corsInstance = {
-    origin: ["http://localhost:5173"],
-    credentials: true, // Allow cookies to be sent,
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-}
+    origin: allowedOrigins,
+    credentials: true,
+};
 
 
 

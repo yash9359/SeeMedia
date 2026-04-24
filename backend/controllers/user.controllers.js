@@ -3,6 +3,16 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { getReceiverSocketID, io } from "../socket/socket.js";
 
+const isProduction = process.env.NODE_ENV === "production";
+
+const getAuthCookieOptions = () => ({
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    maxAge: 5 * 365 * 24 * 60 * 60 * 1000,
+    path: "/",
+});
+
 export const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -28,12 +38,7 @@ export const registerUser = async (req, res) => {
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "1y",
         });
-        const options = {
-            httpOnly: true,
-            maxAge: 5 * 365 * 24 * 60 * 60 * 1000, // 5 years
-            secure: false,
-            sameSite: "Strict",
-        };
+        const options = getAuthCookieOptions();
 
         // Exclude password from the response
         const { password: pass, ...rest } = user._doc;
@@ -77,12 +82,7 @@ export const loginUser = async (req, res) => {
             expiresIn: "5y",
         });
 
-        const options = {
-            httpOnly: true,
-            maxAge: 5 * 365 * 24 * 60 * 60 * 1000, // 5 years
-            secure: false,
-            sameSite: "strict",
-        };
+        const options = getAuthCookieOptions();
 
         // Exclude password from the response
         const { password: pass, ...rest } = user._doc;
@@ -103,10 +103,7 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
     try {
-        const options = {
-            httpOnly: true,
-            secure: true,
-        };
+        const options = getAuthCookieOptions();
         return res.status(200).clearCookie("token", options).json({
             success: true,
             message: "User logged out successfully",

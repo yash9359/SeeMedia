@@ -315,7 +315,7 @@ function Stories() {
 
   const handleStoryView = async (storyId) => {
     if (!storyId) return;
-    if (viewedStoriesRef.current.has(storyId)) return; // ✅ Baar baar nahi chalega
+    if (viewedStoriesRef.current.has(storyId)) return; // Baar baar nahi chalega
     viewedStoriesRef.current.add(storyId);
 
     try {

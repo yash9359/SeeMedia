@@ -4,12 +4,18 @@ import express from "express"
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://see-media.vercel.app",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 
 
 const server = http.createServer(app);
 const io = new Server(server,{
   cors:{
-     origin: ["http://localhost:5173"],
+     origin: allowedOrigins,
     credentials: true, // Allow cookies to be sent,
     methods: ["GET", "POST", "PUT", "DELETE"],
   }

@@ -13,14 +13,14 @@ function Home() {
       {/* sidebar component */}
       <Sidebar  />
 
-      <main className="flex-1 w-full p-4 mx-auto flex-col gap-6 overflow-auto">
+      <main className="flex-1 w-full p-3 sm:p-4 mx-auto flex-col gap-6 overflow-auto">
         {/* stories component */}
         <Stories  />
 
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row lg:items-start">
           {/* Feeds Component */}
           <Feed  />
-          <div className="max-w-80 w-full h-fulllg:block overflow-hidden p-4">
+          <div className="hidden xl:block max-w-80 w-full overflow-hidden p-4">
             {/* Suggested User Component */}
             <SuggestedUsers  />
           </div>
