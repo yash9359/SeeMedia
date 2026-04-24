@@ -180,6 +180,8 @@ function Profile() {
                 <FollowButton
                   targetUserId={profileUser?._id}
                   currentUser={currentUser}
+                  variant="profile"
+                  className="shadow-md"
                 />
               )}
 
@@ -196,7 +198,7 @@ function Profile() {
               ) : (
                 
                 <Link to={`/chats`}>
-                  <button className="bg-linear-to-r from-indigo-500 to-pink-500 py-1 px-4 font-semibold text-sm md:text-base rounded-lg hover:scale-105 transition shadow-md">
+                  <button className="h-10 min-w-28 bg-linear-to-r from-indigo-500 to-pink-500 px-5 font-semibold text-sm md:text-base rounded-lg hover:scale-105 transition shadow-md">
                   Message
                 </button>
                 </Link>
