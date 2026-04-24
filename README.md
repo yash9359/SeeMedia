@@ -5,9 +5,9 @@ SeeMedia is a full-stack social media app with posts, reels, stories, profile ma
 ---
 ## Screenshots
 
-##1.
+1.
 <img width="1919" height="903" alt="Screenshot 2026-04-24 151334" src="https://github.com/user-attachments/assets/05288db3-8822-4c78-b7bb-43a2e7b465f8" />
-##2.
+2.
 
 <img width="1919" height="904" alt="image" src="https://github.com/user-attachments/assets/142f0505-656a-4160-ae6f-1ddab16b7cd2" />
 
