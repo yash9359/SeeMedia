@@ -193,11 +193,11 @@ function Login() {
   flex flex-col md:flex-row items-center overflow-hidden">
 
     {/* left side */}
-    <motion.div
-  initial={shouldReduceMotion ? false : { scale: 0.94, opacity: 0, y: 40, rotateX: -8 }}
-  animate={{ scale: 1, opacity: 1, y: 0, rotateX: 0 }}
-  transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-  className="hidden md:flex md:w-1/2 p-8 h-full items-center justify-center relative"
+   <motion.div
+  initial={shouldReduceMotion ? false : { opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.45, ease: "easeOut" }}
+  className="hidden md:flex md:w-1/2 p-8 h-full items-center justify-center relative will-change-transform"
 >
 
   {/* background */}
