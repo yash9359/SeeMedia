@@ -33,7 +33,7 @@ const ProfileImage = ({ user, username = false, className, showUserNameOnly = fa
 
                 {/*  Online green Dot */}
                 {isOnline && user?._id !== currentUser?._id && (
-                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-black bg-green-500"></span>
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-black bg-green-500 animate-pulse"></span>
                 )}
 
             </div>
