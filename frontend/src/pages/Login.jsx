@@ -194,79 +194,79 @@ function Login() {
 
     {/* left side */}
     <motion.div
-      initial={shouldReduceMotion ? false : { x: -40, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={sidePanelTransition}
-      className="hidden md:flex md:w-1/2 p-8 h-full items-center justify-center relative"
+  initial={shouldReduceMotion ? false : { scale: 0.94, opacity: 0, y: 40, rotateX: -8 }}
+  animate={{ scale: 1, opacity: 1, y: 0, rotateX: 0 }}
+  transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+  className="hidden md:flex md:w-1/2 p-8 h-full items-center justify-center relative"
+>
+
+  {/* background */}
+  <div className="absolute inset-0 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-90 z-0"></div>
+
+  {/* Content */}
+  <div className="relative z-10 flex flex-col items-center text-center p-4">
+
+    {/* logo reveal */}
+    <motion.div
+      initial={shouldReduceMotion ? false : { scale: 0.86, opacity: 0, y: 26, rotate: -6 }}
+      animate={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
+      transition={logoIntroTransition}
+      className="relative w-52 md:w-64 lg:w-72 mb-5"
     >
+      <motion.div
+        aria-hidden="true"
+        className="absolute -inset-4 rounded-full bg-white/20 blur-2xl"
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
+        animate={shouldReduceMotion ? { opacity: 0.35 } : { opacity: [0.2, 0.45, 0.2] }}
+        transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      {/* background */}
-      <div className="absolute inset-0 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-90 z-0"></div>
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-0 rounded-full border border-white/30"
+        initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0 }}
+        animate={shouldReduceMotion ? { scale: 1, opacity: 0.25 } : { scale: [0.94, 1.06, 0.94], opacity: [0.2, 0.45, 0.2] }}
+        transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+      />
 
-      {/* Content */}
-      <div className="relative z-10 flex flex-col items-center text-center p-4">
-
-        {/* logo reveal */}
-        <motion.div
-          initial={shouldReduceMotion ? false : { scale: 0.86, opacity: 0, y: 26, rotate: -6 }}
-          animate={{ scale: 1, opacity: 1, y: 0, rotate: 0 }}
-          transition={logoIntroTransition}
-          className="relative w-52 md:w-64 lg:w-72 mb-5"
-        >
-          <motion.div
-            aria-hidden="true"
-            className="absolute -inset-4 rounded-full bg-white/20 blur-2xl"
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={shouldReduceMotion ? { opacity: 0.35 } : { opacity: [0.2, 0.45, 0.2] }}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <motion.div
-            aria-hidden="true"
-            className="absolute inset-0 rounded-full border border-white/30"
-            initial={shouldReduceMotion ? false : { scale: 0.9, opacity: 0 }}
-            animate={shouldReduceMotion ? { scale: 1, opacity: 0.25 } : { scale: [0.94, 1.06, 0.94], opacity: [0.2, 0.45, 0.2] }}
-            transition={shouldReduceMotion ? { duration: 0 } : { duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <motion.img
-            src={logo}
-            alt="SeeMedia logo"
-            className="relative z-10 w-full h-auto object-contain drop-shadow-[0_14px_40px_rgba(0,0,0,0.45)]"
-            animate={
-              shouldReduceMotion
-                ? { y: 0, rotate: 0 }
-                : { y: [0, -8, 0], rotate: [0, -1.2, 0, 1.2, 0] }
-            }
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : { duration: 4.6, repeat: Infinity, ease: "easeInOut" }
-            }
-          />
-        </motion.div>
-
-        {/* text */}
-        <motion.h1
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.34, delay: 0.18, ease: "easeOut" }}
-          className="text-3xl font-extrabold text-white mb-3 tracking-wide"
-        >
-          Connect with Friends
-        </motion.h1>
-
-        <motion.p
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.36, delay: 0.24, ease: "easeOut" }}
-          className="text-gray-200 text-base md:text-lg font-light leading-relaxed"
-        >
-          Discover, share and connect with people all over the world.
-        </motion.p>
-
-      </div>
+      <motion.img
+        src={logo}
+        alt="SeeMedia logo"
+        className="relative z-10 w-full h-auto object-contain drop-shadow-[0_14px_40px_rgba(0,0,0,0.45)]"
+        animate={
+          shouldReduceMotion
+            ? { y: 0, rotate: 0 }
+            : { y: [0, -8, 0], rotate: [0, -1.2, 0, 1.2, 0] }
+        }
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: 4.6, repeat: Infinity, ease: "easeInOut" }
+        }
+      />
     </motion.div>
+
+    {/* text */}
+    <motion.h1
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.34, delay: 0.18, ease: "easeOut" }}
+      className="text-3xl font-extrabold text-white mb-3 tracking-wide"
+    >
+      Connect with Friends
+    </motion.h1>
+
+    <motion.p
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.36, delay: 0.24, ease: "easeOut" }}
+      className="text-gray-200 text-base md:text-lg font-light leading-relaxed"
+    >
+      Discover, share and connect with people all over the world.
+    </motion.p>
+
+  </div>
+</motion.div>
 
     {/* right side */}
     <div className="w-full md:w-1/2 p-4 md:p-8 flex items-center justify-center">
