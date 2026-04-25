@@ -13,6 +13,7 @@ function Message() {
   const { selectedUser, messages } = useSelector((state) => state.messages);
   const { user: currentUser } = useSelector(state => state.user);
 
+
   const chatMedia = useMemo(() => {
     return messages
       .filter((m) => m.mediaUrl)

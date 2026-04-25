@@ -85,7 +85,7 @@ export const getAllMessages = (receiverId) => async (dispatch) => {
     try {
         const { data } = await axiosInstance.get(`/messages/${receiverId}`);
         if (data?.success) {
-            console.log("data", data)
+        
             dispatch(setMessages(data?.data));
 
         }

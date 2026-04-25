@@ -2,10 +2,12 @@ import { MessageCircle } from 'lucide-react'
 import React from 'react'
 import ProfileImage from './ProfileImage'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function EmptyMessage({ selectedUser }) {
-
-    const onlineUser = true;
+    
+    const {onlineUsers} = useSelector((state)=>state.user);
+    const isOnline = onlineUsers?.includes(selectedUser?._id) ;
     const navigate = useNavigate()
 
     return (
@@ -47,7 +49,7 @@ function EmptyMessage({ selectedUser }) {
                         {selectedUser?.username || "Conversation"}
                     </h2>
 
-                    {onlineUser && (
+                    {isOnline&& (
                         <p className='text-green-400 text-sm flex items-center gap-2'>
                             <span className='w-2 h-2 bg-green-400 rounded-full animate-pulse'></span>
                             Active now
