@@ -51,6 +51,7 @@ function AuthForm({
                     <input
                         type="email"
                         name="email"
+                        autoComplete="email"
                         placeholder="Email Address"
                         value={formData.email}
                         onChange={handlerChange}
@@ -65,6 +66,7 @@ function AuthForm({
                     <input
                         type="password"
                         name="password"
+                        autoComplete="password"
                         placeholder="Password"
                         value={formData.password}
                         onChange={handlerChange}
@@ -149,6 +151,7 @@ function AuthForm({
                     <input
                         type="email"
                         name="email"
+                        autoComplete="email"
                         placeholder="Email Address"
                         value={formData.email}
                         onChange={handlerChange}
@@ -163,6 +166,7 @@ function AuthForm({
                     <input
                         type="password"
                         name="password"
+                        autoComplete="password"
                         placeholder="Password"
                         value={formData.password}
                         onChange={handlerChange}

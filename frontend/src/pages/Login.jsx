@@ -140,8 +140,8 @@ function Login() {
       //     email: formData.email,
       //   }));
     }
-    else if (view == "passwordChange") {
-    }
+    // else if (view == "passwordChange") {
+    // }
 
     // Clear Form after submit
 
